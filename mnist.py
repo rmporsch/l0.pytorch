@@ -83,14 +83,14 @@ def main(epochs, batch_size, coef, mean, baseline):
     logger = tensorboardX.SummaryWriter()
 
     model = LeNet() if baseline else L0Net(mean)
-    model.cuda()
+    # model.cuda()
 
     optimizer = optim.Adam(params=model.parameters(), lr=1e-3)
     l0_loss = lambda output, target: F.cross_entropy(output[0], target) + coef / len(train_loader.dataset) * output[1]
     loss_f = F.cross_entropy if baseline else l0_loss
     trainer = Trainer(model, optimizer, loss_f, logger)
     if not baseline:
-        correct = lambda output, target: (output[0].max(dim=1)[1] == target).sum().data[0]
+        correct = lambda output, target: (output[0].max(dim=1)[1] == target).sum().item()
         trainer.correct = correct
 
     trainer.start(epochs, train_loader, test_loader)

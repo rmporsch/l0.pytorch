@@ -38,11 +38,11 @@ class _L0Norm(nn.Module):
         if self.training:
             self.uniform.uniform_()
             u = Variable(self.uniform)
-            s = F.sigmoid((torch.log(u) - torch.log(1 - u) + self.loc) / self.temp)
+            s = torch.sigmoid((torch.log(u) - torch.log(1 - u) + self.loc) / self.temp)
             s = s * (self.zeta - self.gamma) + self.gamma
-            penalty = F.sigmoid(self.loc - self.temp * self.gamma_zeta_ratio).sum()
+            penalty = torch.sigmoid(self.loc - self.temp * self.gamma_zeta_ratio).sum()
         else:
-            s = F.sigmoid(self.loc) * (self.zeta - self.gamma) + self.gamma
+            s = torch.sigmoid(self.loc) * (self.zeta - self.gamma) + self.gamma
             penalty = 0
         return hard_sigmoid(s), penalty
 
