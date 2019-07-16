@@ -83,7 +83,7 @@ def main(epochs, batch_size, coef, mean, baseline):
     logger = tensorboardX.SummaryWriter()
 
     model = LeNet() if baseline else L0Net(mean)
-    # model.cuda()
+    model.cuda()
 
     optimizer = optim.Adam(params=model.parameters(), lr=1e-3)
     l0_loss = lambda output, target: F.cross_entropy(output[0], target) + coef / len(train_loader.dataset) * output[1]
